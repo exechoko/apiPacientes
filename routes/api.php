@@ -1,9 +1,6 @@
 <?php
 
-use App\Http\Controllers\API\PacienteController;
-use App\Http\Controllers\API\AutenticarController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,28 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-/*Route::get('pacientes', [PacienteController::class, 'index']);
-Route::post('pacientes', [PacienteController::class, 'store']);
-Route::get('pacientes/{paciente}', [PacienteController::class, 'show']);
-Route::put('pacientes/{paciente}', [PacienteController::class, 'update']);
-Route::delete('pacientes/{paciente}', [PacienteController::class, 'destroy']);*/
+Route::group(['prefix' => 'v1','middleware' => 'auth:api'], function () {
+    //    Route::resource('task', 'TasksController');
 
-//Las rutas anteriores en una
-//Route::apiResource('pacientes', PacienteController::class); Comentada para que no tengan acceso salvo que tenga un token
-//misma ruta metida en el middleware de sanctum
-
-
-//Rutas para el manejo de usuarios
-Route::post('registro',[AutenticarController::class, 'registro']);
-Route::post('acceso',[AutenticarController::class, 'acceso']);
-
-Route::group(['middleware' => ['auth:sanctum']], function(){
-    //A esta ruta solo tienen accesos los usuarios que tengan el token asignado
-    Route::post('cerrarsesion',[AutenticarController::class, 'cerrarSesion']);
-    //Las rutas para el acceso a los pacientes no se van a poder utilizar  si no tienen un token
-    Route::apiResource('pacientes', PacienteController::class);
+    //Please do not remove this if you want adminlte:route and adminlte:link commands to works correctly.
+    #adminlte_api_routes
 });
